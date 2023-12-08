@@ -1,0 +1,576 @@
+openapi: 3.0.0
+info:
+  title: Restaurant Reservation System API
+  version: 1.2.0
+  description: API for creating and managing restaurant reservations
+servers:
+  - url: https://example.com/api/v1
+paths:
+  /users:
+    get:
+      summary: Get all users
+      description: Retrieve a list of all users.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+      security:
+        - apiKeyAuth: [] 
+    post:
+      summary: Add a user
+      description: Add a new user to the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      security:
+        - apiKeyAuth: [] 
+  /users/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        description: ID of the user
+        schema:
+          type: integer
+          format: int64
+    get:
+      summary: Get a user by ID
+      description: Retrieve a user by ID.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      security:
+        - apiKeyAuth: [] 
+    put:
+      summary: Update a user by ID
+      description: Update a user's information by ID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      security:
+        - apiKeyAuth: [] 
+    delete:
+      summary: Delete a user by ID
+      description: Delete a user by ID.
+      responses:
+        '204':
+          description: No Content
+      security:
+        - apiKeyAuth: [] 
+  /users/{userId}/reservations:
+    get:
+      summary: Get user's reservations
+      description: Retrieve a list of all reservations made by the user.
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: ID of the user
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Reservation'
+      security:
+        - apiKeyAuth: [] 
+    post:
+      summary: Add a reservation
+      description: Add a new reservation for the user.
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: ID of the user
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReservationInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+      security:
+        - apiKeyAuth: [] 
+  /users/{userId}/reservations/{id}:
+    parameters:
+      - in: path
+        name: userId
+        required: true
+        description: ID of the user
+        schema:
+          type: integer
+          format: int64
+      - in: path
+        name: id
+        required: true
+        description: ID of the reservation
+        schema:
+          type: integer
+          format: int64
+    get:
+      summary: Get a reservation by ID
+      description: Retrieve a reservation by ID.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+      security:
+        - apiKeyAuth: [] 
+    put:
+      summary: Update a reservation by ID
+      description: Update a reservation's information by ID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReservationInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+      security:
+        - apiKeyAuth: [] 
+    delete:
+      summary: Cancel a reservation by ID
+      description: Cancel a reservation by ID.
+      responses:
+        '204':
+          description: No Content
+      security:
+        - apiKeyAuth: [] 
+  /tables:
+    get:
+      summary: Get available tables
+      description: Retrieve a list of available tables for a specific date and time.
+      parameters:
+        - in: query
+          name: date
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Table'
+      security:
+        - apiKeyAuth: [] 
+  /occupied-tables:
+    get:
+      summary: Get occupied tables
+      description: Retrieve a list of occupied tables for a specific date and time.
+      parameters:
+        - in: query
+          name: date
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Table'
+      security:
+        - apiKeyAuth: [] 
+  /signin:
+    post:
+      summary: Sign in
+      description: Verify user credentials and log them into the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignInInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignInOutput'
+      security:
+        - apiKeyAuth: [] 
+  /managers:
+    post:
+      summary: Add new manager
+      tags:
+        - Managers
+      operationId: addManager
+      requestBody:
+        description: Manager information
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserInput"
+      responses:
+        '201':
+          description: Manager added successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        '400':
+          description: Invalid input
+        '404':
+          description: Unauthorized
+        '409':
+          description: Manager already exists
+        '500':
+          description: Internal Server Error
+      security:
+        - apiKeyAuth: [] 
+    get:
+      summary: Get all managers
+      tags:
+        - Managers
+      operationId: getAllManagers
+      responses:
+        '200':
+          description: A list of managers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+        '404':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+      security:
+        - apiKeyAuth: [] 
+  /managers/{id}:
+    get:
+      summary: Get manager by ID
+      tags:
+        - Managers
+      operationId: getManagerById
+      parameters:
+        - in: path
+          name: id
+          description: ID of the manager to retrieve
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Manager information
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        '404':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+      security:
+        - apiKeyAuth: [] 
+    put:
+      summary: Update manager by ID
+      tags:
+        - Managers
+      operationId: updateManagerById
+      parameters:
+        - in: path
+          name: id
+          description: ID of the manager to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Manager information to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserInput"
+      responses:
+        '200':
+          description: Manager updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        '400':
+          description: Invalid input
+        '403':
+          description: Unauthorized
+        '404':
+          description: Manager not found
+        '500':
+          description: Internal Server Error
+      security:
+        - apiKeyAuth: [] 
+    delete:
+      summary: Delete manager by ID
+      tags:
+        - Managers
+      operationId: deleteManagerById
+      parameters:
+        - in: path
+          name: id
+          description: ID of the manager to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Manager deleted successfully
+        '403':
+          description: Unauthorized
+        '404':
+          description: Manager not found
+        '500':
+          description: Internal Server Error
+      security:
+        - apiKeyAuth: [] 
+  /managers/users:
+    post:
+      summary: Add a user
+      description: Add a new user to the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      security:
+        - apiKeyAuth: [] 
+  /managers/users/{id}:
+    put:
+      summary: Update an existing user
+      description: Update an existing user's information
+      tags:
+        - Users
+      security:
+        - apiKeyAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: The ID of the user to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '200':
+          description: The updated user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Not Found
+          
+    delete:
+      summary: Delete a user
+      description: Delete a user from the system
+      tags:
+        - Users
+      security:
+        - apiKeyAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: The ID of the user to delete
+      responses:
+        '204':
+          description: The user was deleted successfully
+        '404':
+          description: Not Found
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+        user_type:
+          type: string
+      required:
+        - user_id
+        - name
+        - password
+        - email
+        - user_type
+    UserInput:
+      type: object
+      properties:
+        name:
+          type: string
+        password:
+          type: string
+        user_type:
+          type: string
+        email:
+          type: string
+      required:
+        - name
+        - password
+        - user_type
+        - email
+    Reservation:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          format: int64
+        table_id:
+          type: integer
+          format: int64
+        reservation_id:
+          type : integer
+        date:
+          type: string
+          format: date
+        time:
+          type: string
+          format: time
+        seats:
+          type: integer
+      required:
+        - reservation_id
+        - user_id
+        - table_id
+        - date
+        - time
+        - seats
+    ReservationInput:
+      type: object
+      properties:
+        table_id:
+          type: integer
+          format: int64
+        date:
+          type: string
+          format: date
+        time:
+          type: string
+          format: time
+        seats:
+          type: integer
+        user_id:
+          type: integer
+          format: int64
+      required:
+        - table_id
+        - date
+        - time
+        - seats
+        - user_id
+    Table:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        capacity:
+          type: integer
+      required:
+        - id
+        - capacity
+    SignInInput:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+    SignInOutput:
+      type: object
+      properties:
+        token:
+          type: string
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      name: X-API-Key
+      in: header

@@ -1,0 +1,65 @@
+SignUp
+curl -i -H "Content-Type: application/json" -X POST -d '{"user_id": "z9h8f","name": "Priyanka","email": "priyanka@gmail.com"}' https://cs3103.cs.unb.ca:8004/signup
+
+SignIn
+curl -i -H "Content-Type: application/json" -X POST -d '{"username": "<your_id>", "password": "<your_pass>"}' -c cookie-jar -k https://cs3103.cs.unb.ca:8004/signin
+
+Reservation
+Create Reservation
+	curl -i -H "Content-Type: application/json" -X POST -d '{"timeslot": "0","reservation_date": "2023-03-26","table_id": "4"}' -b cookie-jar -k https://cs3103.cs.unb.ca:8004/user/reservations
+
+Update Reservation
+	curl -i -H "Content-Type: application/json" -X PUT -d '{"timeslot": "0","reservation_date": "2023-03-27", "reservation_id" : "7"}' -b cookie-jar -k https://cs3103.cs.unb.ca:8004/user/reservations
+
+Delete Reservation
+	curl -i -H "Content-Type: application/json" -X DELETE -b cookie-jar -k https://cs3103.cs.unb.ca:8004/user/<userid>/reservations/<reservationid> 
+
+Get Reservation
+	curl -i -H "Content-Type: application/json" -X GET -b cookie-jar -k https://cs3103.cs.unb.ca:8004/user/reservations
+
+
+SignOut
+curl -i -H "Content-Type: application/json" -X DELETE -b cookie-jar -k https://cs3103.cs.unb.ca:8004/signout
+
+
+Manager
+
+
+curl -i -H "Content-Type: application/json" -X GET -b cookie-jar -k https://cs3103.cs.unb.ca:8004/manager/users 
+
+ADD User	
+	curl -i -H "Content-Type: application/json" -X POST -d '{"user_id": "rick","name": "rick","email": "rick@unb.ca","user_type": "customer"}' -b cookie-jar -k https://cs3103.cs.unb.ca:8004/manager/users
+
+Update User
+	curl -i -H "Content-Type: application/json" -X PUT -d '{"user_id": "z9h8f","name": "Priyanka","email": "Priyanka@gmail.com"}' -b cookie-jar -k https://cs3103.cs.unb.ca:8004/manager/users
+
+Get User Details
+	curl -i -H "Content-Type: application/json" -X GET -b cookie-jar -k https://cs3103.cs.unb.ca:8004/manager/users/z9h8f
+
+Delete User
+	curl -i -H "Content-Type: application/json" -X DELETE -b cookie-jar -k https://cs3103.cs.unb.ca:8004/manager/users/z9h8f
+
+Get All Reservations
+	curl -i -H "Content-Type: application/json" -X GET -b cookie-jar -k https://cs3103.cs.unb.ca:8004/manager/reservations
+
+Get Reservations By User
+	curl -i -H "Content-Type: application/json" -X GET -b cookie-jar -k https://cs3103.cs.unb.ca:8004/manager/reservations/z9h8f
+
+Create Reservation
+	curl -i -H "Content-Type: application/json" -X POST -d '{"timeslot": "0","reservation_date": "2023-03-26","user_id": "z9h8f","table_id": "4"}' -b cookie-jar -k https://cs3103.cs.unb.ca:8004/manager/reservations
+
+Update Reservation
+	curl -i -H "Content-Type: application/json" -X PUT -d '{"user_id": "z9h8f","timeslot": "0","reservation_date": "2023-03-26", "reservation_id" : "7","table_id" : '2'}' -b cookie-jar -k https://cs3103.cs.unb.ca:8004/manager/reservations
+
+Cancel Reservation
+
+	curl -i -H "Content-Type: application/json" -X DELETE -b cookie-jar -k https://cs3103.cs.unb.ca:8004/manager/z9h8f/reservations/11
+
+User
+Update user
+	curl -i -H "Content-Type: application/json" -X PUT -d '{"name": "Priyanka","email": "Priyanka@gmail.com"}' -b cookie-jar -k https://cs3103.cs.unb.ca:8004/user
+
+
+
+
+
